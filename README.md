@@ -133,7 +133,6 @@ NIDAR/
 ---
 ## 6 System Components
 
----
 
 ### 6.1 Scout Drone (Quadcopter)
 
@@ -254,7 +253,6 @@ delivery_drone/models/
 
 ## 9 Usage
 
----
 
 ### 9.1 Run Scout Drone
 
