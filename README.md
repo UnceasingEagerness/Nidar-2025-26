@@ -1,6 +1,6 @@
-# 🚁 Autonomous Disaster Management Drone System
+#  Autonomous Disaster Management Drone System
 
-## 📌 Overview
+## 1. Overview
 
 This repository contains the complete software architecture, autonomous flight logic, and computer vision pipelines developed by **Team RAPTOR (ID: N250781)** for the **NIDAR Challenge 2025–26**.
 
@@ -8,7 +8,7 @@ Our solution is a **dual-drone autonomous system** designed for rapid **survey, 
 
 ---
 
-## 🎯 Problem Statement
+## 2. Problem Statement
 
 During severe flooding in a coastal region, residents may become stranded on rooftops without access to essential supplies.
 
@@ -20,7 +20,7 @@ During severe flooding in a coastal region, residents may become stranded on roo
 
 ---
 
-## 🧠 System Architecture
+## 3. System Architecture
 
 ```text
 Scout Drone (Detection + Geotagging)
@@ -33,7 +33,7 @@ Precision Payload Deployment
 ```
 
 ---
-## 📂 Project Structure
+## 4. Project Structure
 
 ```bash
 NIDAR/
@@ -63,46 +63,46 @@ NIDAR/
 
 ---
 
-## 🚀 Key Features
+## 5. Key Features
 
-### 🛰️ Scout Drone (Reconnaissance & Geotagging)
+### 5.1 Scout Drone (Reconnaissance & Geotagging)
 
-#### 🗺️ Automated Flight Path Generation
+#### 5.1.1 Automated Flight Path Generation
 - Generates a lawnmower grid pattern from KML boundaries  
 - Ensures complete area coverage with minimal overlap  
 
 ---
 
-#### 👁️ Real-Time Survivor Detection
+#### 5.1.2 Real-Time Survivor Detection
 - YOLOv8s (VisDrone dataset) with BoT-SORT tracking  
 - Adaptive confidence scaling for distant targets  
 - Robust detection with minimal false positives  
 
 ---
 
-#### 📍 Smart Geotagging
+#### 5.1.3 Smart Geotagging
 - Trigger-based detection (bottom-frame zone)  
 - Ensures near-vertical alignment for accurate GPS tagging  
 - Filters duplicate detections using spatial thresholds  
 
 ---
 
-#### 📡 Communication Pipeline
+#### 5.1.4 Communication Pipeline
 - Transmits geotags in real-time via LoRa serial communication  
 - Lightweight and reliable for long-range communication  
 
 ---
 
-### 🚁 Delivery Drone (Planning & Payload Delivery)
+### 5.2 Delivery Drone (Planning & Payload Delivery)
 
-#### 🧮 TSP-Based Path Optimization
+#### 5.2.1 TSP-Based Path Optimization
 - Groups geotags into batches based on payload capacity  
 - Uses Traveling Salesman Problem (TSP) solver  
 - Minimizes total flight distance and energy usage  
 
 ---
 
-#### 🌳 Behavior Tree Autonomy
+#### 5.2.2 Behavior Tree Autonomy
 - Built using py_trees  
 - Handles:
   - Mission execution  
@@ -111,33 +111,33 @@ NIDAR/
 
 ---
 
-#### 🎯 Precision AI Alignment
+#### 5.2.3 Precision AI Alignment
 - Powered by Hailo-8 AI Accelerator  
 - Real-time visual servoing using pixel error  
 - Dynamically adjusts drone position for accurate targeting  
 
 ---
 
-#### 📦 Controlled Payload Deployment
+#### 5.2.4 Controlled Payload Deployment
 - Servo-actuated payload release mechanism  
 - Supports sequential and safe delivery  
 
 ---
 
-#### ⚙️ Parallel Execution System
+#### 5.2.5 Parallel Execution System
 - Dual-threaded architecture:
   - Control thread (flight logic)  
   - Communication thread (geotag reception)  
 - Uses shared JSON blackboard for synchronization
 
 ---
-## 🚁 System Components
+## 6 System Components
 
 ---
 
-### 🔹 Scout Drone (Quadcopter)
+### 6.1 Scout Drone (Quadcopter)
 
-#### Hardware
+#### 6.1.1 Hardware
 
 * Custom PLA + Carbon Fiber Frame
 * 920KV BLDC Motors + 1045 Propellers
@@ -147,7 +147,7 @@ NIDAR/
 * LoRa Communication Module
 * USB / SIYI Camera
 
-#### Software Architecture
+#### 6.1.2 Software Architecture
 
 * Multi-threaded execution:
 
@@ -157,9 +157,9 @@ NIDAR/
 
 ---
 
-### 🔹 Delivery Drone (Hexacopter)
+### 6.2 Delivery Drone (Hexacopter)
 
-#### Hardware
+#### 6.2.1 Hardware
 
 * Custom Hexacopter Frame
 * 22000mAh 4S LiPo Battery
@@ -169,7 +169,7 @@ NIDAR/
 * SiK Telemetry Module
 * Raspberry Pi AI Camera
 
-#### Software Architecture
+#### 6.2.2 Software Architecture
 
 * Dual-threaded system:
 
@@ -180,36 +180,36 @@ NIDAR/
 
 ---
 
-## 🧪 Tech Stack
+## 7 Tech Stack
 
-### Flight Control & Autonomy
+### 7.1 Flight Control & Autonomy
 
 * DroneKit Python
 * MAVLink (pymavlink)
 * py_trees (Behavior Trees)
 
-### Computer Vision
+### 7.2 Computer Vision
 
 * OpenCV
 * Ultralytics YOLOv8
 * Hailo GStreamer Pipeline
 
-### Hardware & Communication
+### 7.3 Hardware & Communication
 
 * NVIDIA JetPack
 * Raspberry Pi OS
 * LoRa (pyserial)
 
-### Design & Validation
+### 7.4 Design & Validation
 
 * Autodesk Fusion 360 (CAD Modelling)
 * ANSYS (Static Structural Analysis)
 
 ---
 
-## ⚙️ Installation & Setup
+## 8 Installation & Setup
 
-### 🔽 Clone Repository
+### 8.1 Clone Repository
 
 ```bash
 git clone https://github.com/aeroiit/nidar-challenge-2025-26.git
@@ -218,7 +218,7 @@ cd nidar-challenge-2025-26
 
 ---
 
-### 🛰️ Scout Drone Setup (Jetson Orin Nano)
+### 8.2 Scout Drone Setup (Jetson Orin Nano)
 
 ```bash
 cd scout_drone
@@ -233,7 +233,7 @@ scout_drone/models/
 
 ---
 
-### 📦 Delivery Drone Setup (Raspberry Pi 5)
+### 8.3 Delivery Drone Setup (Raspberry Pi 5)
 
 ```bash
 cd delivery_drone
@@ -252,11 +252,11 @@ delivery_drone/models/
 
 ---
 
-## ▶️ Usage
+## 9 Usage
 
 ---
 
-### 🛰️ Run Scout Drone
+### 9.1 Run Scout Drone
 
 ```bash
 cd scout_drone
@@ -271,7 +271,7 @@ python3 scout.py mission_files/PATH_TO_KML_FILE.kml
 
 ---
 
-### 🚁 Run Delivery Drone
+### 9.2 Run Delivery Drone
 
 ```bash
 cd delivery_drone
@@ -286,7 +286,7 @@ python3 main.py
 
 ---
 
-## 🧩 Key Modules
+## 10 Key Modules
 
 * **main.py (Delivery)**
   Behavior Tree execution and mission control
@@ -311,7 +311,7 @@ python3 main.py
 
 ---
 
-## 🛡️ Safety & Reliability
+## 11 Safety & Reliability
 
 * Return-to-Launch (RTL) on:
 
@@ -326,7 +326,7 @@ python3 main.py
 
 ---
 
-## 🔮 Future Improvements
+## 12 Future Improvements
 
 * Multi-target prioritization using confidence scoring
 * Swarm coordination between multiple scout drones
@@ -335,7 +335,7 @@ python3 main.py
 
 ---
 
-## 👨‍💻 Team RAPTOR
+##  Team RAPTOR
 
 Developed for the **NIDAR Disaster Management Challenge (2025–26)**
 
