@@ -1,221 +1,117 @@
-#  Autonomous Disaster Management Drone System
+<div align="center">
+  <h1>🚁 Autonomous Disaster Management Drone System</h1>
+  <p><strong>Dual-drone autonomous system for rapid survey, reconnaissance, and precision payload delivery in disaster-stricken environments.</strong></p>
+  
+  [![Python](https://img.shields.io/badge/Python-3.x-blue.svg)](https://www.python.org/)
+  [![OpenCV](https://img.shields.io/badge/OpenCV-4.x-green.svg)](https://opencv.org/)
+  [![YOLOv8](https://img.shields.io/badge/YOLOv8-Ultralytics-yellow.svg)](https://ultralytics.com/)
+  [![License](https://img.shields.io/badge/License-Academic-lightgrey.svg)](#)
+</div>
 
-## 1. Overview
+---
+
+## 📖 1. Overview
 
 This repository contains the complete software architecture, autonomous flight logic, and computer vision pipelines developed by **Team RAPTOR (ID: N250781)** for the **NIDAR Challenge 2025–26**.
 
-Our solution is a **dual-drone autonomous system** designed for rapid **survey, reconnaissance, and precision payload delivery** in disaster-stricken environments.
+Our solution is a **dual-drone autonomous system** designed to operate in disaster-stricken areas, enabling rapid and efficient assistance to stranded victims.
 
 ---
 
-## 2. Problem Statement
+## 🚨 2. Problem Statement
 
-During severe flooding in a coastal region, residents may become stranded on rooftops without access to essential supplies.
+During severe flooding in coastal regions, residents may become stranded on rooftops without access to essential supplies. 
 
-### Mission Objectives
-
-* Autonomously scan a **30-hectare disaster zone**
-* Detect and geotag survivors using real-time vision
-* Deploy a delivery drone to **precisely drop 200g survival kits**
+### 🎯 Mission Objectives
+- 📡 **Scan:** Autonomously scan a **30-hectare disaster zone**.
+- 📍 **Detect:** Detect and geotag survivors using real-time vision.
+- 📦 **Deliver:** Deploy a delivery drone to **precisely drop 200g survival kits**.
 
 ---
 
-## 3. System Architecture
+## 🏗️ 3. System Architecture
 
-```text
-Scout Drone (Detection + Geotagging)
-        ↓  (LoRa / Serial Communication)
-Geotag Coordinates (lat, lon)
-        ↓
-Delivery Drone (Planning + Navigation + AI Alignment)
-        ↓
-Precision Payload Deployment
+```mermaid
+graph TD
+    A[Scout Drone<br>Detection + Geotagging] -->|LoRa / Serial Comm<br>Geotag Coordinates| B(Delivery Drone<br>Planning + Navigation + AI Alignment)
+    B --> C[Precision Payload Deployment]
 ```
 
 ---
-## 4. Project Structure
+
+## 📁 4. Project Structure
 
 ```bash
 NIDAR/
 ├── README.md
 ├── .gitignore
-│
-├── delivery_drone/
+├── delivery_drone/           # Hexacopter payload delivery codebase
 │   ├── main.py
 │   ├── behaviours/
 │   ├── models/
 │   │   └── yolov8s_new.hef
 │   └── data/
 │       └── received_geotags.json
-│
-├── scout_drone/
+├── scout_drone/              # Quadcopter reconnaissance codebase
 │   ├── scout.py
 │   ├── geolocation.py
 │   ├── models/
 │   │   └── yolov8s_visdrone.pt
 │   └── mission_files/
 │       └── cricketground_full.kml
-│
-└── docs/
+└── docs/                     # Architecture diagrams & documentation
     ├── architecture.png
     └── system_design.md
 ```
 
 ---
 
-## 5. Key Features
+## ✨ 5. Key Features
 
-### 5.1 Scout Drone (Reconnaissance & Geotagging)
+### 🚁 5.1 Scout Drone (Reconnaissance & Geotagging)
+* **🗺️ Automated Flight Path Generation**: Generates a lawnmower grid pattern from KML boundaries ensuring complete area coverage with minimal overlap.
+* **👀 Real-Time Survivor Detection**: Utilizes YOLOv8s (VisDrone dataset) with BoT-SORT tracking. Features adaptive confidence scaling for distant targets and robust detection to minimize false positives.
+* **📍 Smart Geotagging**: Uses trigger-based detection (bottom-frame zone) to ensure near-vertical alignment for accurate GPS tagging. Filters duplicate detections using spatial thresholds.
+* **📡 Communication Pipeline**: Transmits geotags in real-time via lightweight and reliable LoRa serial communication for long-range connectivity.
 
-#### 5.1.1 Automated Flight Path Generation
-- Generates a lawnmower grid pattern from KML boundaries  
-- Ensures complete area coverage with minimal overlap  
-
----
-
-#### 5.1.2 Real-Time Survivor Detection
-- YOLOv8s (VisDrone dataset) with BoT-SORT tracking  
-- Adaptive confidence scaling for distant targets  
-- Robust detection with minimal false positives  
-
----
-
-#### 5.1.3 Smart Geotagging
-- Trigger-based detection (bottom-frame zone)  
-- Ensures near-vertical alignment for accurate GPS tagging  
-- Filters duplicate detections using spatial thresholds  
+### 🛸 5.2 Delivery Drone (Planning & Payload Delivery)
+* **🛣️ TSP-Based Path Optimization**: Groups geotags into batches based on payload capacity and uses a Traveling Salesman Problem (TSP) solver to minimize total flight distance and energy usage.
+* **🧠 Behavior Tree Autonomy**: Built using `py_trees` to robustly handle mission execution, safety checks, and fail-safe actions (e.g., RTL, payload checks).
+* **🎯 Precision AI Alignment**: Powered by a Hailo-8 AI Accelerator for real-time visual servoing using pixel error, dynamically adjusting the drone position for accurate targeting.
+* **📦 Controlled Payload Deployment**: Servo-actuated payload release mechanism supporting sequential and safe delivery.
+* **⚙️ Parallel Execution System**: Dual-threaded architecture with a control thread (flight logic) and communication thread (geotag reception) synchronized via a shared JSON blackboard.
 
 ---
 
-#### 5.1.4 Communication Pipeline
-- Transmits geotags in real-time via LoRa serial communication  
-- Lightweight and reliable for long-range communication  
-
----
-
-### 5.2 Delivery Drone (Planning & Payload Delivery)
-
-#### 5.2.1 TSP-Based Path Optimization
-- Groups geotags into batches based on payload capacity  
-- Uses Traveling Salesman Problem (TSP) solver  
-- Minimizes total flight distance and energy usage  
-
----
-
-#### 5.2.2 Behavior Tree Autonomy
-- Built using py_trees  
-- Handles:
-  - Mission execution  
-  - Safety checks  
-  - Fail-safe actions (RTL, payload checks)  
-
----
-
-#### 5.2.3 Precision AI Alignment
-- Powered by Hailo-8 AI Accelerator  
-- Real-time visual servoing using pixel error  
-- Dynamically adjusts drone position for accurate targeting  
-
----
-
-#### 5.2.4 Controlled Payload Deployment
-- Servo-actuated payload release mechanism  
-- Supports sequential and safe delivery  
-
----
-
-#### 5.2.5 Parallel Execution System
-- Dual-threaded architecture:
-  - Control thread (flight logic)  
-  - Communication thread (geotag reception)  
-- Uses shared JSON blackboard for synchronization
-
----
-## 6 System Components
-
+## 🔧 6. System Components
 
 ### 6.1 Scout Drone (Quadcopter)
-
-#### 6.1.1 Hardware
-
-* Custom PLA + Carbon Fiber Frame
-* 920KV BLDC Motors + 1045 Propellers
-* Pixhawk 6C Flight Controller
-* NVIDIA Jetson Orin Nano (AI compute)
-* F9P GPS Module
-* LoRa Communication Module
-* USB / SIYI Camera
-
-#### 6.1.2 Software Architecture
-
-* Multi-threaded execution:
-
-  * Flight path generation
-  * Detection & tracking
-  * Geotag transmission
-
----
+**Hardware:** Custom PLA + Carbon Fiber Frame | 920KV BLDC Motors + 1045 Propellers | Pixhawk 6C | NVIDIA Jetson Orin Nano | F9P GPS | LoRa Module | USB / SIYI Camera  
+**Software:** Multi-threaded execution (Flight path generation, Detection & tracking, Geotag transmission)
 
 ### 6.2 Delivery Drone (Hexacopter)
-
-#### 6.2.1 Hardware
-
-* Custom Hexacopter Frame
-* 22000mAh 4S LiPo Battery
-* Pixhawk Cube Orange+
-* Raspberry Pi 5 + Hailo AI Hat
-* Here 3+ GNSS
-* SiK Telemetry Module
-* Raspberry Pi AI Camera
-
-#### 6.2.2 Software Architecture
-
-* Dual-threaded system:
-
-  * **Control Thread** → Behavior Tree execution
-  * **Communication Thread** → LoRa geotag reception
-
-* Shared JSON-based **Blackboard System**
+**Hardware:** Custom Hexacopter Frame | 22000mAh 4S LiPo | Pixhawk Cube Orange+ | Raspberry Pi 5 + Hailo AI Hat | Here 3+ GNSS | SiK Telemetry | Pi AI Camera  
+**Software:** Dual-threaded system (Control & Communication threads) with a shared JSON-based Blackboard System.
 
 ---
 
-## 7 Tech Stack
+## 💻 7. Tech Stack
 
-### 7.1 Flight Control & Autonomy
-
-* DroneKit Python
-* MAVLink (pymavlink)
-* py_trees (Behavior Trees)
-
-### 7.2 Computer Vision
-
-* OpenCV
-* Ultralytics YOLOv8
-* Hailo GStreamer Pipeline
-
-### 7.3 Hardware & Communication
-
-* NVIDIA JetPack
-* Raspberry Pi OS
-* LoRa (pyserial)
-
-### 7.4 Design & Validation
-
-* Autodesk Fusion 360 (CAD Modelling)
-* ANSYS (Static Structural Analysis)
+- **Flight Control & Autonomy**: DroneKit Python, MAVLink (`pymavlink`), `py_trees` (Behavior Trees)
+- **Computer Vision**: OpenCV, Ultralytics YOLOv8, Hailo GStreamer Pipeline
+- **Hardware OS & Comm**: NVIDIA JetPack, Raspberry Pi OS, LoRa (`pyserial`)
+- **Design & Validation**: Autodesk Fusion 360 (CAD), ANSYS (Static Structural Analysis)
 
 ---
 
-## 8 Installation & Setup
+## 🚀 8. Installation & Setup
 
 ### 8.1 Clone Repository
 
 ```bash
-git clone https://github.com/aeroiit/nidar-challenge-2025-26.git
-cd nidar-challenge-2025-26
+git clone https://github.com/UnceasingEagerness/Nidar-2025-26.git
+cd Nidar-2025-26
 ```
-
----
 
 ### 8.2 Scout Drone Setup (Jetson Orin Nano)
 
@@ -223,14 +119,7 @@ cd nidar-challenge-2025-26
 cd scout_drone
 pip install -r requirements.txt
 ```
-
-> Ensure YOLO weights are placed in:
-
-```
-scout_drone/models/
-```
-
----
+> **Note:** Ensure YOLO weights are placed in `scout_drone/models/`
 
 ### 8.3 Delivery Drone Setup (Raspberry Pi 5)
 
@@ -238,107 +127,44 @@ scout_drone/models/
 cd delivery_drone
 pip install -r requirements.txt
 ```
-
-> Ensure:
-
-* Hailo runtime installed
-* GStreamer plugins configured
-* `.hef` model placed in:
-
-```
-delivery_drone/models/
-```
+> **Note:** Ensure the Hailo runtime is installed, GStreamer plugins are configured, and the `.hef` model is placed in `delivery_drone/models/`
 
 ---
 
-## 9 Usage
-
+## 🎮 9. Usage
 
 ### 9.1 Run Scout Drone
-
+Automatically generates the flight path, detects survivors, and sends out geotags.
 ```bash
 cd scout_drone
 python3 scout.py mission_files/PATH_TO_KML_FILE.kml
 ```
 
-> Automatically:
-
-* Generates path
-* Detects survivors
-* Sends geotags
-
----
-
 ### 9.2 Run Delivery Drone
-
+Automatically receives geotags, plans the optimal route, aligns via AI, and drops the payload.
 ```bash
 cd delivery_drone
 python3 main.py
 ```
 
-> Automatically:
+---
 
-* Receives geotags
-* Plans optimal route
-* Aligns and drops payload
+## 🛡️ 10. Safety & Reliability
+- **Return-to-Launch (RTL)** triggered on low battery or payload depletion.
+- **Duplicate geotag filtering** and stable detection verification.
+- **Robust communication** with an integrated ACK protocol.
 
 ---
 
-## 10 Key Modules
-
-* **main.py (Delivery)**
-  Behavior Tree execution and mission control
-
-* **scout.py (Scout)**
-  Flight path generation and navigation
-
-* **geolocation.py (Scout)**
-  Detection, tracking, and geotagging
-
-* **drone_allign.py (Delivery)**
-  Hailo-based visual alignment using pixel error
-
-* **path_planner.py (Delivery)**
-  TSP-based route optimization
-
-* **geotag_read.py (Delivery)**
-  LoRa communication + ACK protocol
-
-* **deploy_action.py (Delivery)**
-  MAVLink servo control for payload release
+## 🔮 11. Future Improvements
+- Multi-target prioritization using confidence scoring.
+- Swarm coordination between multiple scout drones.
+- Improved control using PID-based alignment.
+- Real-time mission monitoring dashboard.
 
 ---
 
-## 11 Safety & Reliability
-
-* Return-to-Launch (RTL) on:
-
-  * Low battery
-  * Payload depletion
-
-* Duplicate geotag filtering
-
-* Stable detection verification
-
-* Robust communication with ACK protocol
-
----
-
-## 12 Future Improvements
-
-* Multi-target prioritization using confidence scoring
-* Swarm coordination between multiple scout drones
-* Improved control using PID-based alignment
-* Real-time mission monitoring dashboard
-
----
-
-##  Team RAPTOR
-
-Developed for the **NIDAR Disaster Management Challenge (2025–26)**
-
----
-
-## 📜 License
-
-This project is intended for academic and research purposes.
+<div align="center">
+  <p>Developed with ❤️ by <strong>trizzz (Team RAPTOR)</strong> for the <strong>NIDAR Disaster Management Challenge (2025–26)</strong></p>
+  <p><i>This project is intended for academic and research purposes.</i></p>
+</div>
